@@ -10,55 +10,45 @@ A simple multiclass image classifier built with FastAI + PyTorch to identify dif
 
 ## Objective
 Build a Computer Vision model that classifies images across multiple sports categories. The full pipeline includes:
-- Automatic creation of class folders
-- Train/validation split
-- Training with a pretrained ResNet34
-- Fine-tuning
-- Result interpretation (confusion matrix and top losses)
+- Automatic class folder creation  
+- Train/validation data split  
+- Model fine-tuning  
+- Performance reports (confusion matrix, top losses)
 
 ---
 
 ## Project Structure
-```
+
+```bash
 fastai-balls-classifier/
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── notebooks/
-│   └── 01_experiments.ipynb   # tests and initial experiments
-│
-├── src/
-│   ├── train.py               # final training + fine-tuning
-│   ├── predict.py             # inference on new images
-│   ├── prepare_split.py       # optional train/validation split
-│   └── utils.py               # helper functions
-│
-├── models/
-│   └── resnet34_export.pkl    # exported model
-│
-├── reports/
-│   ├── confusion_matrix.png
-│   ├── top_losses.png
-│   └── lr_find.png
-│
-├── app/
-│   └── app.py                 # Streamlit demo
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
+├── data/              # raw and processed images
+├── notebooks/         # experiments and prototyping
+├── src/               # training and utils scripts
+├── models/            # saved and exported models
+├── reports/           # plots and metrics
+├── app.py             # Streamlit demo
+└── requirements.txt
 ```
+
+You can setup by running:
+```bash
+pip install -r requirements.txt
+```
+
 
 ## Fitting ResNet34 pre-trained model
 ```bash
 python src/train.py
 ```
-- Building FastAI DataLoaders  
-- Fitting the head layer (frozen base) to adapt the pretrained ResNet to the new classes
-- Unfreezing the entire network and performing fine-tuning
-- Automatically saving the best model weights
-- Generating training reports
+- Builds FastAI DataLoaders
+- Trains the head layer (frozen base)
+- Unfreezes and fine-tunes the entire network
+- Saves the best model automatically
+- Generates reports and plots
+
+![train_val_loss_epochs](./reports/train_val_loss_epochs.png)
+
+**Note**: The validation loss becomes unstable after a few epochs, indicating overfitting due to the small dataset size and the model starting to memorize the training data.
 
 ## Results
 
@@ -72,7 +62,19 @@ python src/train.py
 
 ![Confusion Matrix](./reports/confusion_matrix.png)
 
-## 
+## Predicting
+
+You can predict from the command line:
+```bash
+python src/predict.py ./data/sample/dragonball.png
+```
+or launch the Streamlit app
+
+```bash
+streamlit run app.py
+```
+
+![streamlit_example](./reports/streamlit_example.png)
 
 
 
